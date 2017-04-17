@@ -1,0 +1,94 @@
+//LAB 5 - PROGRAMMING PROBLEMS #11
+//**************************************************************************//
+//This program will grade a multiple choice exam.
+//The exam has 20 questions, answered with letters 'a' through 'f'
+//The data are stored on file (exams.txt) where the first line is the key,
+//consisting of a string of 20 characters. The remaining lines on the file
+//are exam answers; each consist of a student ID number, a space, and
+//a string of 20 characters. The program should read the key, read each exam,
+//and output the ID and score to file (scores.txt)
+//Erroneuos input should result in a an error message.
+//**************************************************************************//
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <iomanip>
+
+using namespace std;
+
+void grading(ofstream& outFile, string ansKey, string stdAns);          //Declare function and parameter
+
+int main()
+{
+    ifstream inFile;
+    inFile.open ("exams.txt");
+    
+    ofstream outFile;
+    outFile.open ("scores.txt");
+    
+    outFile << "Lab 5 - Exam Scores Program \n" << endl;
+    outFile <<  "Student ID \t\t" << "Grade Score" << endl;
+    outFile << "---------- \t\t" << "----------- \n";
+    
+    string ansKey, stdID, stdAns, firstSID;
+
+    inFile >> ansKey;
+    //inFile >> firstSID;
+    //outFile << ansKey;
+    
+    do
+    {
+        inFile >> stdID;
+        outFile << stdID << " \t\t";
+        grading(outFile, ansKey, stdAns);
+        outFile << endl;
+        inFile >> stdAns;
+      
+    }
+      while (!inFile.eof());
+    
+    outFile << "\n";
+    
+    inFile.close();
+    outFile.close();
+    
+    string copy;
+    ifstream copyFile;
+    copyFile.open ("scores.txt");
+    
+    while (getline (copyFile, copy))
+    {
+        cout << copy << endl;
+    }
+    
+    copyFile.close();
+
+    
+    return 0;
+}
+
+//*******************************************************************************//
+void grading (ofstream& outFile, string ansKey, string stdAns)
+{
+    int score = 0;
+    
+    if (stdAns.length() < ansKey.length())
+    {
+    outFile << "Too few answers ";
+    }
+    else if (stdAns.length() > ansKey.length())
+    {
+        outFile << "Too many answers ";
+    }
+    else
+    {
+        for (int i = 0; i<21; i++)
+            if (stdAns[i] == ansKey[i])
+            {
+                score++;
+            }
+        outFile << score;
+            
+    }
+}
